@@ -7,7 +7,6 @@ struct Elf {
 }
 
 fn main() {
-
     println!("Best elf has {} calories", best_elf().calories);
     let three = best_three();
     println!("Best elves are {:?}", three);
@@ -21,8 +20,7 @@ fn main() {
     println!("Best elves summed {}", sum);
 }
 
-fn best_elf () -> Elf {
-    
+fn best_elf() -> Elf {
     let file = File::open("./input").unwrap();
     let lines = BufReader::new(file).lines();
 
@@ -46,21 +44,20 @@ fn best_elf () -> Elf {
         best_elf.calories = elf.calories;
         elf.calories = 0;
     }
-    
+
     best_elf
 }
 
-fn best_three () -> Vec<Elf> {
-     
+fn best_three() -> Vec<Elf> {
     let file = File::open("./input").unwrap();
     let lines = BufReader::new(file).lines();
 
     let mut elf = Elf { calories: 0 };
-    let mut best_elf = vec!(
+    let mut best_elf = vec![
         Elf { calories: 0 },
         Elf { calories: 0 },
-        Elf { calories: 0 }
-    );
+        Elf { calories: 0 },
+    ];
     for line in lines {
         match line.unwrap().parse::<i64>() {
             Ok(y) => {
@@ -76,10 +73,10 @@ fn best_three () -> Vec<Elf> {
         }
     }
 
-                if *best_elf.first().unwrap() < elf {
-                    best_elf[0].calories = elf.calories;
-                }
-                best_elf.sort();
-    
+    if *best_elf.first().unwrap() < elf {
+        best_elf[0].calories = elf.calories;
+    }
+    best_elf.sort();
+
     best_elf
 }
