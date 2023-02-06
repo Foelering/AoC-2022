@@ -43,7 +43,7 @@ impl TryFrom<String> for Backpack {
     type Error = ParsingError;
 }
 
-fn main() {
+fn part_1 () {
 
     let file = File::open("./input").unwrap();
     let lines = BufReader::new(file).lines();
@@ -59,6 +59,36 @@ fn main() {
     println!("Sum {}", sum);
 }
 
+fn part_2 () {
+
+    let file = File::open("./input").unwrap();
+    let lines = BufReader::new(file).lines();
+    let mut sum: i64 = 0;
+    let mut partial = u64::pow(2, 53) - 1;
+    println!("Partial {}", partial);
+    for line in lines.enumerate() {
+        let coded = line.1.unwrap();
+        println!("Coded {}", coded);
+        let back = Backpack::try_from(coded.clone()).unwrap();
+        partial &= back.first | back.second;
+
+        if line.0 % 3 == 2 {
+            sum += partial.ilog2() as i64;
+            partial = u64::pow(2, 53) - 1;
+            println!("Partial sum {}", sum);
+        } 
+        println!("Partial {}", partial);
+    }
+
+    println!("Sum {}", sum);
+
+}
+
+fn main() {
+    part_1();
+    part_2();
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs::File;
@@ -67,7 +97,7 @@ mod tests {
     use crate::*;
     
     #[test]
-    fn test_on_known_imput () {
+    fn test_first_part () {
 
         let file = File::open("./test").unwrap();
         let lines = BufReader::new(file).lines();
@@ -89,6 +119,34 @@ mod tests {
         println!("Sum {}", sum);
 
         assert_eq!(157, sum, "Sum is {}, should be 157", sum)
+
+    }
+
+    #[test]
+    fn test_second_part () {
+
+        let file = File::open("./test").unwrap();
+        let lines = BufReader::new(file).lines();
+        let mut sum: i64 = 0;
+        let mut partial = u64::pow(2, 53) - 1;
+        println!("Partial {}", partial);
+        for line in lines.enumerate() {
+            let coded = line.1.unwrap();
+            println!("Coded {}", coded);
+            let back = Backpack::try_from(coded.clone()).unwrap();
+            partial &= back.first | back.second;
+
+            if line.0 % 3 == 2 {
+                sum += partial.ilog2() as i64;
+                partial = u64::pow(2, 53) - 1;
+                println!("Partial sum {}", sum);
+            } 
+            println!("Partial {}", partial);
+        }
+    
+        println!("Sum {}", sum);
+
+        assert_eq!(70, sum, "Sum is {}, should be 157", sum)
 
     }
 }
